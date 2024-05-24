@@ -1,0 +1,36 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-executables-have-shebangs
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  - repo: https://github.com/psf/black
+    rev: 23.7.0 # Replace by any tag/version: https://github.com/psf/black/tags
+    hooks:
+      - id: black
+        language_version: python3.8
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        args: [ '--select=E9,F40,F63,F7,F81,F82' ]
+
+# big hooks list https://github.com/returntocorp/semgrep/blob/develop/.pre-commit-config.yaml
+# pip install pre-commit
+# create .pre-commit-config.yaml in project root
+# pre-commit install
+# now git commit
+# to reform not only changes buf full files:
+# pre-commit run --all-files
+  #check that executables have shebangs.................(no files to check)Skipped
+  #fix end of files.........................................................Passed
+  #mixed line ending........................................................Passed
+  #trim trailing whitespace.................................................Passed
+  #black....................................................................Passed
+  #flake8...................................................................Passed
+# update all hooks in .pre-commit-config.yaml files
+# pre-commit autoupdate
