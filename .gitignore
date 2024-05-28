@@ -1,7 +1,10 @@
 # My adds
-data/
+/tests/data/
+/tests/raw_docs/
 prompts.txt
 *.pem
+keys.py
+/setup_dep.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
