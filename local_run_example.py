@@ -34,7 +34,8 @@ def second():
         pipeline_kwargs={"max_new_tokens": 512, "return_full_text": False},
         model_kwargs={
             "do_sample": True,
-            "top_k": 30,
+            # "top_k": 30,
+            "top_p": 0.1,
             "temperature": 0.0,
             "repetition_penalty": 1.03,
             "max_length": 512,
@@ -95,7 +96,6 @@ def second():
         {
             "context": retrieval_chain,
             "question": itemgetter("question"),
-            # "question_numbers": itemgetter("question_numbers"),
         }
         | prompt_generation
         | llm
