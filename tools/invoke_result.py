@@ -1,3 +1,6 @@
+from langchain.load import dumps, loads
+
+
 def invoke_input_context_answer(chain_invoke_result):
     answer = ""
     answer += "QUESTION: \n"
@@ -38,3 +41,20 @@ def invoke_query_source_documents_result(chain_invoke_result):
         chain_invoke_result.get("result").split("Generate according to:")[-1].strip()
     )
     return answer
+
+
+def invoke_generate_queries_with_origin(queries_result: dict) -> str:
+    question = queries_result.get("question")
+    alternatives = queries_result.get("alternatives").replace("\n\n", "\n")
+    new_queries = f"Original question: {question}?" + alternatives
+    return new_queries
+
+
+def invoke_unique_docs_union_from_retriever(documents: list[list]) -> list:
+    """Unique union of retrieved docs"""
+    # Flatten list of lists, and convert each Document to string
+    flattened_docs = [dumps(doc) for sublist in documents for doc in sublist]
+    # Get unique documents
+    unique_docs = list(set(flattened_docs))
+    # Return
+    return [loads(doc) for doc in unique_docs]
