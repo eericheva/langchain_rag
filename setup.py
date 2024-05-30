@@ -12,9 +12,9 @@ formatter = logging.Formatter(
 )
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)
-logger.handlers.clear()
+logger.handlers.clear()  # to avoid doubling in logger output
 logger.addHandler(handler)
-logger.propagate = False
+logger.propagate = False  # to avoid doubling in logger output
 
 ########### KEYS AND TOKENS ###########
 if not os.path.isfile("keys.py"):

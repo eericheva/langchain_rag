@@ -66,7 +66,12 @@ Pls, refer to the other options and files listed below, to get less commented sc
         </tr>
         <tr>
             <td rowspan=2 align="left">How to store embeddings in vectorstore (FAISS or Chroma)</td>
-            <td align="left">default</td>
+            <td align="left">
+
+default with:
+- text splitter
+- progress bar on creating vectorstore
+- dump and load from disk </td>
             <td align="left">
 
 [create_vectorstore.py](create_vectorstore.py) </td>

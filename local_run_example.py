@@ -19,13 +19,14 @@ from tools.invoke_result import (
 def second():
     print_config()
 
+    # Load model for embedding documents
     logger.info(f"LLM_EMB : {Config.HF_EMB_MODEL}")
     llm_emb = HuggingFaceEmbeddings(
         model_name=os.path.join(Config.MODEL_SOURCE, Config.HF_EMB_MODEL),
         model_kwargs={"device": "cpu"},
         encode_kwargs={"normalize_embeddings": False},
     )
-
+    # Load model for generating answer
     logger.info(f"LLM : {Config.HF_LLM_NAME}")
     llm = HuggingFacePipeline.from_model_id(
         model_id=os.path.join(Config.MODEL_SOURCE, Config.HF_LLM_NAME),
@@ -34,7 +35,6 @@ def second():
         pipeline_kwargs={"max_new_tokens": 512, "return_full_text": False},
         model_kwargs={
             "do_sample": True,
-            # "top_k": 30,
             "top_p": 0.1,
             "temperature": 0.0,
             "repetition_penalty": 1.03,
@@ -44,6 +44,7 @@ def second():
 
     logger.info("VECTORSTORE")
     vectorstore = create_vectorstore(llm_emb)
+    logger.info("RETRIEVER")
     retriever = vectorstore.as_retriever(
         search_type="similarity", search_kwargs={"k": 4}
     )
@@ -86,7 +87,7 @@ def second():
     # result = retrieval_chain.invoke({"question": Config.MYQ, "question_numbers": 2})
     # print(result)
 
-    # Prompt for generation answer with retriever and generatin prompt
+    # Prompt for generation answer with retriever and generation prompt
     prompt_generation = PromptTemplate(
         template=prompt_templates.prompt_template_question_context,
         input_variables=["question", "context"],
