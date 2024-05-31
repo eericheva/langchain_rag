@@ -1,14 +1,18 @@
+import os
 from operator import itemgetter
 
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.retrieval_qa.base import RetrievalQA
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
+from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableLambda
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from tqdm import tqdm
 
-from embedders.create_llm_emb_default import create_llm_emb_default
-from generators.create_llm_gen_default import create_llm_gen_default
 from setup import Config, logger, print_config
 from tools import prompt_templates
 from tools.invoke_result import (
@@ -17,35 +21,128 @@ from tools.invoke_result import (
     invoke_query_source_documents_result,
     invoke_unique_docs_union_from_retriever,
 )
-from vectorstores.get_vectorstore import get_vectorstore
+from vectorstores.get_vectorstore import collect_documents
 
 
 def overview():
+    ############## INITIAL SETUP ##############
     # Go to the setup.py and set you tokens, key and setup params: vectorstore type, models, local paths
     print_config()
 
+    ############## EMBEDDING MODEL ##############
     # Load model for embedding documents
     logger.info(f"LLM_EMB : {Config.HF_EMB_MODEL}")
-    llm_emb = create_llm_emb_default()
+    # llm_emb = create_llm_emb_default()
+    # OR This return:
+    llm_emb = HuggingFaceEmbeddings(
+        # https://api.python.langchain.com/en/latest/embeddings/langchain_community.embeddings.huggingface
+        # .HuggingFaceEmbeddings.html
+        model_name=os.path.join(Config.MODEL_SOURCE, Config.HF_EMB_MODEL),
+        model_kwargs={
+            # full list of parameters for this section with explanation:
+            # https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html
+            # #sentence_transformers.SentenceTransformer
+            "device": "cpu"
+        },
+        encode_kwargs={
+            # full list of parameters for this section with explanation:
+            # https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html
+            # #sentence_transformers.SentenceTransformer.encode
+            "normalize_embeddings": False
+        },
+    )
 
+    ############## GENERATOR MODEL ##############
     # Load model for generating answer
     logger.info(f"LLM : {Config.HF_LLM_NAME}")
-    llm_gen = create_llm_gen_default()
+    # llm_gen = create_llm_gen_default()
+    # OR This returns:
+    llm_gen = HuggingFacePipeline.from_model_id(
+        # https://api.python.langchain.com/en/latest/llms/langchain_community.llms.huggingface_pipeline
+        # .HuggingFacePipeline.html
+        model_id=os.path.join(Config.MODEL_SOURCE, Config.HF_LLM_NAME),
+        task="text-generation",
+        device=-1,  # -1 stands for CPU
+        pipeline_kwargs={
+            # full list of parameters for this section with explanation:
+            # https://huggingface.co/docs/transformers/en/main_classes/text_generation
+            # Note: some of them (depends on the specific model) should go to the model_kwargs attribute
+            "max_new_tokens": 512,  # How long could be generated answer
+            "return_full_text": False,
+            # "return_full_text": True if you want to return within generation answer also all prompts,
+            # contexts and other serving instrumentals
+        },
+        model_kwargs={
+            # full list of parameters for this section with explanation:
+            # https://huggingface.co/docs/transformers/en/main_classes/text_generation
+            # Note: some of them (depends on the specific model) should go to the pipeline_kwargs attribute
+            "do_sample": True,
+            "top_k": 10,
+            "temperature": 0.0,
+            "repetition_penalty": 1.03,  # 1.0 means no penalty
+            "max_length": 20,
+        },
+    )
 
-    # Create or load vectorstore (FAISS or Chroma)
-    vectorstore = get_vectorstore(llm_emb)
+    ############## LOAD DOCUMENTS BASE ##############
+    # Create new vectorstore (FAISS)
+    logger.info("#### RELOAD_VECTORSTORE ####")
+    # Load Documents
+    docs = collect_documents()  # this contains list of texts from my documents base
 
+    ############## TEXT SPLITTER FOR DOCUMENTS ##############
+    # split documents to chunks, retriever will search through embedded chunks, not whole documents
+    logger.info("Split")
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,  # num of characters in single chunk
+        chunk_overlap=200,  # num of characters to appear in neighborous chunks
+    )
+    splits = text_splitter.split_documents(docs)
+    del docs  # for gc
+    logger.info(f"Num of splits : {len(splits)}")
+
+    ############## VECTORSTORE FOR EMBEDDINGS ##############
+    # create vector store FAISS
+    # https://python.langchain.com/v0.1/docs/integrations/vectorstores/faiss/
+    # for Num of splits : 700 will take Time : ~60min
+    logger.info("vectorstore FAISS")
+    # do whole work in one approach (Note: FAISS has no verbose parameter)
+    # vectorstore = FAISS.from_documents(documents=splits,
+    #                                    embedding=llm_emb)
+    # add progress bar to FAISS creating procedure, to see some verbose:
+    vectorstore = FAISS.from_documents(
+        documents=[splits[0]], embedding=llm_emb  # here we provide our embedding model
+    )
+    splits = splits[1:]
+    for d in tqdm(splits, desc="vectorstore FAISS documents"):
+        vectorstore.add_documents([d])
+    del splits  # for gc
+
+    # save vectorstore FAISS to the disk (Note: Chroma has another signature)
+    vectorstore.save_local(Config.VECTORSTORE_FILE)
+
+    # load vectorstore FAISS from the disk (Note: Chroma has another signature)
+    logger.info("vectorstore FAISS from dump")
+    vectorstore = FAISS.load_local(
+        folder_path=Config.VECTORSTORE_FILE,
+        embeddings=llm_emb,  # here we provide our embedding model
+        allow_dangerous_deserialization=True,  # True for data (docs) with loading from a pickle file.
+    )
+
+    ############## RETRIEVER MODEL FROM EMBEDDING MODEL ##############
     logger.info("RETRIEVER")
     retriever = vectorstore.as_retriever(
         # full list of parameters for this section with explanation:
         # https://api.python.langchain.com/en/latest/vectorstores/langchain_chroma.vectorstores.Chroma.html
         # #langchain_chroma.vectorstores.Chroma.as_retriever
         search_type="similarity",
-        search_kwargs={"k": 4},  # return top-4 relevant documents
+        search_kwargs={
+            "k": 4
+        },  # return top-4 relevant (according to search_type) documents for single query
     )
     del vectorstore  # for gc
 
-    #### V1 ####
+    ############## V1 FULL RAG = RETRIEVER + GENERATOR ##############
     logger.info("Classical RETRIEVER and GENERATOR")
     # Prompt
     prompt = PromptTemplate(
@@ -58,7 +155,7 @@ def overview():
     result = chain.invoke({"input": Config.MYQ})
     print(invoke_input_context_answer(result))
 
-    #### V2 ####
+    ############## V2 FULL RAG = RETRIEVER + GENERATOR ##############
     logger.info("Classical RETRIEVER and GENERATOR with chain type")
     chain = RetrievalQA.from_chain_type(
         llm=llm_gen,
@@ -70,7 +167,7 @@ def overview():
     result = chain.invoke({"query": Config.MYQ})
     print(invoke_query_source_documents_result(result))
 
-    #### V3 with Runnable Sequences ####
+    ############## V3 with Runnable Sequences FULL RAG = RETRIEVER + GENERATOR ##############
     # Generate multiple alternatives to the question formulation
     # Prompt for multiple alternatives to the question formulation
     prompt_multi_query = PromptTemplate(

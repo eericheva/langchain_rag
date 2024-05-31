@@ -43,12 +43,12 @@ def invoke_query_source_documents_result(chain_invoke_result):
     return answer
 
 
-def invoke_generate_queries_with_origin(queries_result: dict) -> str:
+def invoke_generate_queries_with_origin(input_dict: dict) -> str:
     """Attach Original question to generated Alternatives"""
     # input: queries_result: dict with keys ("question", "alternatives")
     # names of these key were setted up in the variables for calling chain
-    question = queries_result.get("question")
-    alternatives = queries_result.get("alternatives").replace("\n\n", "\n")
+    question = input_dict.get("question")
+    alternatives = input_dict.get("alternatives").replace("\n\n", "\n")
     new_queries = f"Original question: {question}?" + alternatives
     return new_queries
 
