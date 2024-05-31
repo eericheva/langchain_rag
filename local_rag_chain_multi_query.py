@@ -15,28 +15,35 @@ from tools.invoke_result import (
 from vectorstores.get_vectorstore import get_vectorstore
 
 
-def second():
+def local_rag_multi_query():
+    ############## INITIAL SETUP ##############
     print_config()
 
+    ############## EMBEDDING MODEL ##############
     # Load model for embedding documents
     logger.info(f"LLM_EMB : {Config.HF_EMB_MODEL}")
     llm_emb = create_llm_emb_default()
 
+    ############## GENERATOR MODEL ##############
     # Load model for generating answer
     logger.info(f"LLM : {Config.HF_LLM_NAME}")
     llm_gen = create_llm_gen_default()
 
+    ############## VECTORSTORE FOR EMBEDDINGS ##############
     # Create or load vectorstore (FAISS or Chroma)
     logger.info("VECTORSTORE")
     vectorstore = get_vectorstore(llm_emb)
+
+    ############## RETRIEVER MODEL FROM EMBEDDING MODEL ##############
     logger.info("RETRIEVER")
     retriever = vectorstore.as_retriever(
         search_type="similarity", search_kwargs={"k": 4}
     )
     del vectorstore
 
+    ############## FULL RAG = RETRIEVER + GENERATOR ##############
     logger.info("Multi Query RETRIEVER and RAG Chain")
-
+    ############## MULTIPLE QUERY CHAIN ##############
     # Generate multiple alternatives to the question formulation
     # Prompt for multiple alternatives to the question formulation
     prompt_multi_query = PromptTemplate(
@@ -62,6 +69,7 @@ def second():
     # result = invoke_generate_queries_chain.invoke({"question": Config.MYQ, "question_numbers": 2})
     # print(result)
 
+    ############## RETRIEVAL CHAIN ##############
     # Retrieval Chain for multiple alternatives to the question formulation
     retrieval_chain = (
         invoke_generate_queries_chain
@@ -72,6 +80,7 @@ def second():
     # result = retrieval_chain.invoke({"question": Config.MYQ, "question_numbers": 2})
     # print(result)
 
+    ############## GENERATOR CHAIN ##############
     # Prompt for generation answer with retriever and generation prompt
     prompt_generation = PromptTemplate(
         template=prompt_templates.prompt_template_question_context,
@@ -88,9 +97,10 @@ def second():
         | StrOutputParser()
     )
 
+    ############## RUN ALL CHAINS ##############
     result = rag_chain.invoke({"question": Config.MYQ, "question_numbers": 2})
     print(result)
 
 
 if __name__ == "__main__":
-    second()
+    local_rag_multi_query()

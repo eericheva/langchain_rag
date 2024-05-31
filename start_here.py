@@ -6,9 +6,12 @@ from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.retrieval_qa.base import RetrievalQA
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
+from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableLambda
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from tqdm import tqdm
 
 from setup import Config, logger, print_config
 from tools import prompt_templates
@@ -18,7 +21,7 @@ from tools.invoke_result import (
     invoke_query_source_documents_result,
     invoke_unique_docs_union_from_retriever,
 )
-from vectorstores.get_vectorstore import get_vectorstore
+from vectorstores.get_vectorstore import collect_documents
 
 
 def overview():
@@ -81,9 +84,50 @@ def overview():
         },
     )
 
+    ############## LOAD DOCUMENTS BASE ##############
+    # Create new vectorstore (FAISS)
+    logger.info("#### RELOAD_VECTORSTORE ####")
+    # Load Documents
+    docs = collect_documents()  # this contains list of texts from my documents base
+
+    ############## TEXT SPLITTER FOR DOCUMENTS ##############
+    # split documents to chunks, retriever will search through embedded chunks, not whole documents
+    logger.info("Split")
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,  # num of characters in single chunk
+        chunk_overlap=200,  # num of characters to appear in neighborous chunks
+    )
+    splits = text_splitter.split_documents(docs)
+    del docs  # for gc
+    logger.info(f"Num of splits : {len(splits)}")
+
     ############## VECTORSTORE FOR EMBEDDINGS ##############
-    # Create or load vectorstore (FAISS or Chroma)
-    vectorstore = get_vectorstore(llm_emb)
+    # create vector store FAISS
+    # https://python.langchain.com/v0.1/docs/integrations/vectorstores/faiss/
+    # for Num of splits : 700 will take Time : ~60min
+    logger.info("vectorstore FAISS")
+    # do whole work in one approach (Note: FAISS has no verbose parameter)
+    # vectorstore = FAISS.from_documents(documents=splits,
+    #                                    embedding=llm_emb)
+    # add progress bar to FAISS creating procedure, to see some verbose:
+    vectorstore = FAISS.from_documents(
+        documents=[splits[0]], embedding=llm_emb  # here we provide our embedding model
+    )
+    splits = splits[1:]
+    for d in tqdm(splits, desc="vectorstore FAISS documents"):
+        vectorstore.add_documents([d])
+    del splits  # for gc
+
+    # save vectorstore FAISS to the disk (Note: Chroma has another signature)
+    vectorstore.save_local(Config.VECTORSTORE_FILE)
+
+    # load vectorstore FAISS from the disk (Note: Chroma has another signature)
+    logger.info("vectorstore FAISS from dump")
+    vectorstore = FAISS.load_local(
+        folder_path=Config.VECTORSTORE_FILE,
+        embeddings=llm_emb,  # here we provide our embedding model
+        allow_dangerous_deserialization=True,  # True for data (docs) with loading from a pickle file.
+    )
 
     ############## RETRIEVER MODEL FROM EMBEDDING MODEL ##############
     logger.info("RETRIEVER")
@@ -92,7 +136,9 @@ def overview():
         # https://api.python.langchain.com/en/latest/vectorstores/langchain_chroma.vectorstores.Chroma.html
         # #langchain_chroma.vectorstores.Chroma.as_retriever
         search_type="similarity",
-        search_kwargs={"k": 4},  # return top-4 relevant documents
+        search_kwargs={
+            "k": 4
+        },  # return top-4 relevant (according to search_type) documents for single query
     )
     del vectorstore  # for gc
 

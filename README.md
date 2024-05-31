@@ -1,29 +1,34 @@
-# RAG system locally with LangChain RunnableSequence. HOWTOs
+# RAG locally with LangChain RunnableSequence. HOWTOs
 
 Repo contains scripts with overly detailed explanations as well as advanced scripts with not an excessive number of
-details and comments. These resources aim to provide someone with concise guidance and practical examples for creating a
-RAG system from scratch.
+details and comments (ready to run ones). These resources aim to provide someone with concise guidance and practical
+examples for creating and evaluating a RAG system from scratch.
 
-How to read and create RAG:
+### How to read and create RAG:
 
-- with RunnableSequences (langchain) _(if you want clean and structured approach and easy-to-follow code sequences)_
-- with HuggingFace models _(if you want to try some the very resent releases and cutting-edge technology)_
-- localy _(if you love the smell of code in the morning)_
+- with __RunnableSequences__ (langchain) _(if you want clean and structured approach and easy-to-follow code sequences)_
+- with __HuggingFace__ models _(if you want to try some the very resent releases and cutting-edge technology)_
+- __localy__ _(if you love the smell of code in the morning)_
 
 Pls, investigate [`start_here.py`](start_here.py). The file is exceptionally detailed from the start.
 
-How to choose retrieval model (llm embedder)? --> [mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard), tab:
+### Where to find the model and how to choose one:
+
+How to choose retrieval model (llm embedder)? --> [mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard),
+tab:
 Retrieval or Retrieval w/Instruction
 
-How to choose reranking model (reorder list of releveant documents)? --> [mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard), tab:
+How to choose reranking model (reorder list of releveant documents)?
+--> [mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard), tab:
 Reranking
 
-How to choose generator model (llm for generate finel answer)? --> [open-llm-leaderboard/open_llm_leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
+How to choose generator model (llm for generate finel answer)?
+--> [open-llm-leaderboard/open_llm_leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
+
+### Advanced option to rule RAG:
 
 Pls, refer to the other options and files listed below, to get less commented, but more advanced scripts, examples and
 techniques.
-
-### Advanced option to rule RAG:
 
 <table>
     <thead>
@@ -50,16 +55,26 @@ techniques.
         <tr>
             <td align="left">R3 Text D</td>
         </tr> -->
-        <tr>
+<tr>
             <td rowspan=2 align="left">How to run HuggingFace models</td>
-            <td align="left">localy</td>
+            <td align="left">localy:
+
+- with HuggingFaceEmbeddings
+- with HuggingFacePipeline
+
+</td>
             <td align="left">
 
-[local_run_example.py](local_run_example.py) </td>
+[local_rag_chain_simple.py](local_rag_chain_simple.py)
+
+[local_rag_retrieval_qa_class.py](local_rag_retrieval_qa_class.py) </td>
 <td align="left"></td>
 </tr>
 <tr>
-<td align="left">with HuggingFaceHub</td>
+<td align="left">remotely:
+
+- with HuggingFaceHub</td>
+
 <td align="left"></td>
 <td align="left">
 
@@ -104,17 +119,20 @@ default with:
 [Text embedding models](https://python.langchain.com/v0.1/docs/modules/data_connection/text_embedding/) </td>
 </tr>
 <tr>
-<td align="left">with Caching</td>
 <td align="left">
 
-[create_llm_emb_cached.py](embedders/create_llm_emb_cached.py)
-</td>
+with Caching _(save your time while next creating)_</td>
+<td align="left">
+
+[create_llm_emb_cached.py](embedders/create_llm_emb_cached.py) </td>
 <td align="left">
 
 [Caching Embeddings](https://python.langchain.com/v0.1/docs/modules/data_connection/text_embedding/caching_embeddings/) </td>
 </tr>
 <tr>
-<td align="left">with Compressing</td>
+<td align="left">
+
+with Compressing _(save RAM while store and retrieving)_</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
@@ -128,7 +146,9 @@ default with:
 </tr>
 <tr>
 <td align="left">with Multiple Queries Generation</td>
-<td align="left"></td>
+<td align="left">
+
+[local_rag_chain_multi_query.py](local_rag_chain_multi_query.py)</td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -149,14 +169,20 @@ with `chain_type` :
   <td align="left"></td>
   </tr>
   <tr>
-        <td align="left">How to generate answer</td>
+        <td rowspan=2 align="left">How to generate answer</td>
         <td align="left">default</td>
         <td align="left">
 
   [create_llm_gen_default.py](generators/create_llm_gen_default.py) </td>
+  <td align="left"></td>
+
+</tr>
+  <tr>
+        <td align="left">with Prompting</td>
+        <td align="left"></td>
         <td align="left"></td>
 </tr>
 
-    </tbody>
+</tbody>
 
 </table>
