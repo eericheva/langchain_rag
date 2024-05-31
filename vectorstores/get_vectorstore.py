@@ -4,31 +4,19 @@ import pickle
 from langchain_community.document_loaders import pdf
 from langchain_community.vectorstores import Chroma, FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from tqdm import tqdm
 
 from setup import Config, logger
+from vectorstores import create_vectorstore
 
 
-def create_vectorstore(llm_emb):
-    # Load Documents
+def get_vectorstore(llm_emb):
+    vectorstore = []
     if Config.RELOAD_VECTORSTORE:
         # if need to create new vectorstore
         logger.info("#### RELOAD_VECTORSTORE ####")
-        if not os.path.exists(Config.DOC_LOADER_FILE):
-            # if there is no dump pickle file with docs
-            logger.info("#### LOAD RAW DOCS ####")
-            docs = []
-            for file_name in os.listdir(Config.DOC_SOURCE):
-                fp = os.path.join(Config.DOC_SOURCE, file_name)
 
-                docs += pdf.PyPDFLoader(fp).load()
-
-            logger.info(f"dump raw docs to {Config.DOC_LOADER_FILE} file")
-            pickle.dump(docs, open(Config.DOC_LOADER_FILE, "wb"))
-
-        logger.info(f"load raw docs from {Config.DOC_LOADER_FILE} file")
-        docs = pickle.load(open(Config.DOC_LOADER_FILE, "rb"))
-
+        # Load Documents
+        docs = collect_documents()
         # split documents to chunks, retriever will search through embedded chunks, not whole documents
         logger.info("Split")
         text_splitter = RecursiveCharacterTextSplitter(
@@ -42,30 +30,13 @@ def create_vectorstore(llm_emb):
             # https://python.langchain.com/v0.1/docs/integrations/vectorstores/chroma/
             # for Num of splits : 700 will take Time : ~60min
             logger.info("vectorstore Chroma")
-            vectorstore = Chroma.from_documents(
-                documents=splits,
-                embedding=llm_emb,
-                persist_directory=Config.VECTORSTORE_FILE,  # where vectorstore will store
-            )
-            del splits  # for gc
-            # save to disk
-            vectorstore.persist()
+            create_vectorstore.create_vectorstore_chroma(splits, llm_emb)
 
         if Config.VECTORSTORE2USE == "FAISS":
             # https://python.langchain.com/v0.1/docs/integrations/vectorstores/faiss/
             # for Num of splits : 700 will take Time : ~60min
             logger.info("vectorstore FAISS")
-            # do whole work in one approach
-            # vectorstore = FAISS.from_documents(documents=splits,
-            #                                    embedding=llm_emb)
-            # add progress bar to FAISS creating procedure
-            vectorstore = FAISS.from_documents(documents=[splits[0]], embedding=llm_emb)
-            splits = splits[1:]
-            for i, d in tqdm(enumerate(splits), desc="vectorstore FAISS documents"):
-                vectorstore.add_documents([d])
-            del splits  # for gc
-            # save to disk
-            vectorstore.save_local(Config.VECTORSTORE_FILE)
+            create_vectorstore.create_vectorstore_faiss(splits, llm_emb)
 
     if Config.VECTORSTORE2USE == "CHROMA":
         logger.info("vectorstore Chroma from dump")
@@ -83,3 +54,21 @@ def create_vectorstore(llm_emb):
             allow_dangerous_deserialization=True,  # True for data with loading a pickle file.
         )
     return vectorstore
+
+
+def collect_documents():
+    docs = []
+    if not os.path.exists(Config.DOC_LOADER_FILE):
+        # if there is no dump pickle file with docs
+        logger.info("#### LOAD RAW DOCS ####")
+        for file_name in os.listdir(Config.DOC_SOURCE):
+            fp = os.path.join(Config.DOC_SOURCE, file_name)
+
+            docs += pdf.PyPDFLoader(fp).load()
+
+        logger.info(f"dump raw docs to {Config.DOC_LOADER_FILE} file")
+        pickle.dump(docs, open(Config.DOC_LOADER_FILE, "wb"))
+
+    logger.info(f"load raw docs from {Config.DOC_LOADER_FILE} file")
+    docs = pickle.load(open(Config.DOC_LOADER_FILE, "rb"))
+    return docs

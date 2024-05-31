@@ -1,16 +1,14 @@
-import os
 from operator import itemgetter
 
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.retrieval_qa.base import RetrievalQA
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableLambda
 
-from create_vectorstore import create_vectorstore
+from embedders.create_llm_emb_default import create_llm_emb_default
+from generators.create_llm_gen_default import create_llm_gen_default
 from setup import Config, logger, print_config
 from tools import prompt_templates
 from tools.invoke_result import (
@@ -19,6 +17,7 @@ from tools.invoke_result import (
     invoke_query_source_documents_result,
     invoke_unique_docs_union_from_retriever,
 )
+from vectorstores.get_vectorstore import get_vectorstore
 
 
 def overview():
@@ -27,53 +26,14 @@ def overview():
 
     # Load model for embedding documents
     logger.info(f"LLM_EMB : {Config.HF_EMB_MODEL}")
-    llm_emb = HuggingFaceEmbeddings(
-        # https://api.python.langchain.com/en/latest/embeddings/langchain_community.embeddings.huggingface
-        # .HuggingFaceEmbeddings.html
-        model_name=os.path.join(Config.MODEL_SOURCE, Config.HF_EMB_MODEL),
-        model_kwargs={
-            # full list of parameters for this section with explanation:
-            # https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html
-            # #sentence_transformers.SentenceTransformer
-            "device": "cpu"
-        },
-        encode_kwargs={
-            # full list of parameters for this section with explanation:
-            # https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html
-            # #sentence_transformers.SentenceTransformer.encode
-            "normalize_embeddings": False
-        },
-    )
+    llm_emb = create_llm_emb_default()
+
     # Load model for generating answer
     logger.info(f"LLM : {Config.HF_LLM_NAME}")
-    llm = HuggingFacePipeline.from_model_id(
-        # https://api.python.langchain.com/en/latest/llms/langchain_community.llms.huggingface_pipeline
-        # .HuggingFacePipeline.html
-        model_id=os.path.join(Config.MODEL_SOURCE, Config.HF_LLM_NAME),
-        task="text-generation",
-        device=-1,  # -1 stands for CPU
-        pipeline_kwargs={
-            # full list of parameters for this section with explanation:
-            # https://huggingface.co/docs/transformers/en/main_classes/text_generation
-            # Note: some of them (depends on the specific model) should go to the model_kwargs attribute
-            "max_new_tokens": 512,  # How long could be generated answer
-            "return_full_text": False,
-            # "return_full_text": True if you want to return within generation answer also all prompts,
-            # contexts and other serving instrumentals
-        },
-        model_kwargs={
-            # full list of parameters for this section with explanation:
-            # https://huggingface.co/docs/transformers/en/main_classes/text_generation
-            # Note: some of them (depends on the specific model) should go to the pipeline_kwargs attribute
-            "do_sample": True,
-            "top_k": 10,
-            "temperature": 0.0,
-            "repetition_penalty": 1.03,  # 1.0 means no penalty
-            "max_length": 20,
-        },
-    )
-    # create or load vectorstore (FAISS or Chroma)
-    vectorstore = create_vectorstore(llm_emb)
+    llm_gen = create_llm_gen_default()
+
+    # Create or load vectorstore (FAISS or Chroma)
+    vectorstore = get_vectorstore(llm_emb)
 
     logger.info("RETRIEVER")
     retriever = vectorstore.as_retriever(
@@ -92,7 +52,7 @@ def overview():
         template=prompt_templates.prompt_template_input_context,
         input_variables=["context", "input"],
     )
-    question_answer_chain = create_stuff_documents_chain(llm, prompt)
+    question_answer_chain = create_stuff_documents_chain(llm_gen, prompt)
     chain = create_retrieval_chain(retriever, question_answer_chain)
     logger.info("rag_chain.invoke")
     result = chain.invoke({"input": Config.MYQ})
@@ -101,7 +61,7 @@ def overview():
     #### V2 ####
     logger.info("Classical RETRIEVER and GENERATOR with chain type")
     chain = RetrievalQA.from_chain_type(
-        llm=llm,
+        llm=llm_gen,
         chain_type="refine",
         retriever=retriever,
         return_source_documents=True,
@@ -129,7 +89,7 @@ def overview():
             # Actual value will be taken from this.invoke({}) calling from key "question_numbers"
         }
         | prompt_multi_query
-        | llm
+        | llm_gen
         | StrOutputParser()
     )
     # The generate_queries_chain is a pipeline built using LangChain's RunnableSequence. How this work?
@@ -207,7 +167,7 @@ def overview():
         # "context" will take value from the output of retrieval_chain
         # "question" will take value from calling this.invoke() with provided "question" key
         | prompt_generation
-        | llm
+        | llm_gen
         | StrOutputParser()
     )
 
