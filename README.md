@@ -89,6 +89,9 @@ techniques.
 [Get started with LangSmith](https://docs.smith.langchain.com/) </td>
 </tr>
 <tr>
+<td colspan=4 align="center">How to store and embed documents?</td>
+</tr>
+<tr>
 <td align="left">How to store embeddings in vectorstore (FAISS or Chroma)</td>
 <td align="left">
 
@@ -137,18 +140,25 @@ with Compressing _(save RAM while store and retrieving)_</td>
 <td align="left"></td>
 </tr>
 <tr>
+<td colspan=4 align="center">How RunnableSequence chains work?</td>
+</tr>
+<tr>
 <td rowspan=4 align="left">How to retrieve documents</td>
 <td align="left">default</td>
 <td align="left">
 
-[create_vectorstore.py](vectorstores/create_vectorstore.py) </td>
+[local_rag_chain_simple.py](local_rag_chain_simple.py)
+
+[combine_simple_RAG_chains.py](chains/combine_simple_RAG_chains.py) </td>
 <td align="left">
 </tr>
 <tr>
 <td align="left">with Multiple Queries Generation</td>
 <td align="left">
 
-[local_rag_chain_multi_query.py](local_rag_chain_multi_query.py)</td>
+[local_rag_chain_multi_query.py](local_rag_chain_multi_query.py)
+
+[multiple_queries_chain.py](chains/multiple_queries_chain.py)</td>
 <td align="left"></td>
 </tr>
 <tr>

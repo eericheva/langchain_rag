@@ -65,6 +65,10 @@ def local_rag_multi_query():
         | RunnableLambda(invoke_generate_queries_with_origin)
         | (lambda x: x.split("\n"))
     )
+    # V2 - you can create chain in another function and call it here, leave all other next code as it is:
+    # from chains.multiple_queries_chain import multiple_queries_chain
+    # invoke_generate_queries_chain = multiple_queries_chain(llm_gen)
+
     # to check multiple generated questions:
     # result = invoke_generate_queries_chain.invoke({"question": Config.MYQ, "question_numbers": 2})
     # print(result)

@@ -8,7 +8,7 @@ from tools import prompt_templates
 from tools.invoke_result import invoke_generate_queries_with_origin
 
 
-def generate_multiple_queries_chain(llm_gen):
+def multiple_queries_chain(llm_gen):
     # Generate multiple alternatives to the question formulation
     # Prompt for multiple alternatives to the question formulation
     prompt_multi_query = PromptTemplate(
@@ -25,12 +25,12 @@ def generate_multiple_queries_chain(llm_gen):
         | llm_gen
         | StrOutputParser()
     )
-    invoke_generate_queries_chain = (
+    generate_queries_chain = (
         {"question": itemgetter("question"), "alternatives": generate_queries_chain}
         | RunnableLambda(invoke_generate_queries_with_origin)
         | (lambda x: x.split("\n"))
     )
     # to check multiple generated questions:
-    # result = invoke_generate_queries_chain.invoke({"question": Config.MYQ, "question_numbers": 2})
+    # result = generate_queries_chain.invoke({"question": Config.MYQ, "question_numbers": 2})
     # print(result)
-    return invoke_generate_queries_chain
+    return generate_queries_chain

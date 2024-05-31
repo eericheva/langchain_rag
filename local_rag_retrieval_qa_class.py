@@ -14,7 +14,7 @@ from tools.invoke_result import (
 from vectorstores.get_vectorstore import get_vectorstore
 
 
-def local_rag_multi_query():
+def local_rag_retrieval_qa():
     ############## INITIAL SETUP ##############
     print_config()
 
@@ -68,4 +68,4 @@ def local_rag_multi_query():
 
 
 if __name__ == "__main__":
-    local_rag_multi_query()
+    local_rag_retrieval_qa()
