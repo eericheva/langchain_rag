@@ -24,7 +24,7 @@ def second():
 
     # Load model for generating answer
     logger.info(f"LLM : {Config.HF_LLM_NAME}")
-    llm = create_llm_gen_default()
+    llm_gen = create_llm_gen_default()
 
     # Create or load vectorstore (FAISS or Chroma)
     logger.info("VECTORSTORE")
@@ -50,7 +50,7 @@ def second():
             "question_numbers": itemgetter("question_numbers"),
         }
         | prompt_multi_query
-        | llm
+        | llm_gen
         | StrOutputParser()
     )
     invoke_generate_queries_chain = (
@@ -84,7 +84,7 @@ def second():
             "question": itemgetter("question"),
         }
         | prompt_generation
-        | llm
+        | llm_gen
         | StrOutputParser()
     )
 
