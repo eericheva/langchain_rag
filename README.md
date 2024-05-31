@@ -12,7 +12,16 @@ How to read and create RAG:
 
 Pls, investigate [`start_here.py`](start_here.py). The file is exceptionally detailed from the start.
 
-Pls, refer to the other options and files listed below, to get less commented scripts and examples
+How to choose retrieval model (llm embedder)? --> [mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard), tab:
+Retrieval or Retrieval w/Instruction
+
+How to choose reranking model (reorder list of releveant documents)? --> [mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard), tab:
+Reranking
+
+How to choose generator model (llm for generate finel answer)? --> [open-llm-leaderboard/open_llm_leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
+
+Pls, refer to the other options and files listed below, to get less commented, but more advanced scripts, examples and
+techniques.
 
 ### Advanced option to rule RAG:
 
@@ -47,12 +56,12 @@ Pls, refer to the other options and files listed below, to get less commented sc
             <td align="left">
 
 [local_run_example.py](local_run_example.py) </td>
-            <td align="left"></td>
-        </tr>
-        <tr>
-            <td align="left">with HuggingFaceHub</td>
-            <td align="left"></td>
-            <td align="left">
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">with HuggingFaceHub</td>
+<td align="left"></td>
+<td align="left">
 
 [Hugging Face Hub documentation](https://huggingface.co/docs/hub/en/index) </td>
 </tr>
@@ -63,63 +72,91 @@ Pls, refer to the other options and files listed below, to get less commented sc
         <td align="left">
 
 [Get started with LangSmith](https://docs.smith.langchain.com/) </td>
-        </tr>
-        <tr>
-            <td rowspan=2 align="left">How to store embeddings in vectorstore (FAISS or Chroma)</td>
-            <td align="left">
+</tr>
+<tr>
+<td align="left">How to store embeddings in vectorstore (FAISS or Chroma)</td>
+<td align="left">
 
 default with:
+
 - text splitter
 - progress bar on creating vectorstore
 - dump and load from disk </td>
-            <td align="left">
+  <td align="left">
 
-[create_vectorstore.py](create_vectorstore.py) </td>
-            <td align="left">
+[get_vectorstore.py](vectorstores/get_vectorstore.py)
+
+[create_vectorstore.py](vectorstores/create_vectorstore.py)</td>
+<td align="left">
 
 [FAISS](https://python.langchain.com/v0.1/docs/integrations/vectorstores/faiss/)
 
 [Chroma](https://python.langchain.com/v0.1/docs/integrations/vectorstores/chroma/) </td>
-        </tr>
-        <tr>
-            <td align="left">with Caching</td>
-            <td align="left"></td>
-            <td align="left">
+</tr>
+<tr>
+<td rowspan=3 align="left">How to embed documents</td>
+<td align="left">default</td>
+<td align="left">
+
+[create_llm_emb_default.py](embedders/create_llm_emb_default.py) </td>
+<td align="left">
+
+[Text embedding models](https://python.langchain.com/v0.1/docs/modules/data_connection/text_embedding/) </td>
+</tr>
+<tr>
+<td align="left">with Caching</td>
+<td align="left">
+
+[create_llm_emb_cached.py](embedders/create_llm_emb_cached.py)
+</td>
+<td align="left">
 
 [Caching Embeddings](https://python.langchain.com/v0.1/docs/modules/data_connection/text_embedding/caching_embeddings/) </td>
-        </tr>
-        <tr>
-            <td rowspan=5 align="left">How to retrieve documents</td>
-            <td align="left">default</td>
-            <td align="left"></td>
-            <td align="left"></td>
-        </tr>
-        <tr>
-            <td align="left">with Compressing</td>
-            <td align="left"></td>
-            <td align="left"></td>
-        </tr>
-        <tr>
-            <td align="left">with Multiple Queries Generation</td>
-            <td align="left"></td>
-            <td align="left"></td>
-        </tr>
-        <tr>
-            <td align="left">
+</tr>
+<tr>
+<td align="left">with Compressing</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td rowspan=4 align="left">How to retrieve documents</td>
+<td align="left">default</td>
+<td align="left">
+
+[create_vectorstore.py](vectorstores/create_vectorstore.py) </td>
+<td align="left">
+</tr>
+<tr>
+<td align="left">with Multiple Queries Generation</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">
 
 with `chain_type` :
+
 - `stuff`,
 - `map_reduce`,
 - `refine`,
 - `map_rerank`</td>
-            <td align="left"></td>
-            <td align="left"></td>
-        </tr>
-        <tr>
-            <td align="left">with Prompting</td>
-            <td align="left"></td>
-            <td align="left"></td>
-        </tr>
+  <td align="left"></td>
+  <td align="left"></td>
+  </tr>
+  <tr>
+  <td align="left">with Prompting</td>
+  <td align="left"></td>
+  <td align="left"></td>
+  </tr>
+  <tr>
+        <td align="left">How to generate answer</td>
+        <td align="left">default</td>
+        <td align="left">
+
+  [create_llm_gen_default.py](generators/create_llm_gen_default.py) </td>
+        <td align="left"></td>
+</tr>
 
     </tbody>
+
 </table>

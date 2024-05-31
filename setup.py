@@ -39,8 +39,9 @@ os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
 class Config:
     ########### SETUP ###########
-    source_path = "../langchain_rag_data"  # "tests", "../langchain_rag_data"
-    RELOAD_VECTORSTORE = False  # True if you want to recreate new vector store with new embedding or new documents
+    source_path = "tests"  # "tests", "../langchain_rag_data"
+    RELOAD_VECTORSTORE = True  # True if you want to recreate new vector store with new embedding or new documents
+    # False, if you want to restore vectorstore from dump
 
     VECTORSTORE2USE = "FAISS"  # "FAISS", "CHROMA"
     # models = repo names from hugginface_hub
