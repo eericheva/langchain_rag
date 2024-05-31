@@ -10,7 +10,7 @@ examples for creating and evaluating a RAG system from scratch.
 - with __HuggingFace__ models _(if you want to try some the very resent releases and cutting-edge technology)_
 - __localy__ _(if you love the smell of code in the morning)_
 
-Pls, investigate [`start_here.py`](start_here.py). The file is exceptionally detailed from the start.
+Pls, investigate [`start_here.py`](start_here.py). The file is exceptionally detailed for the begginers.
 
 ### Where to find the model and how to choose one:
 
@@ -65,9 +65,9 @@ techniques.
 </td>
             <td align="left">
 
-[local_rag_chain_simple.py](local_rag_chain_simple.py)
+[local_rag_chain_simple.py](run_examples/local_rag_chain_simple.py)
 
-[local_rag_retrieval_qa_class.py](local_rag_retrieval_qa_class.py) </td>
+[local_rag_retrieval_qa_class.py](run_examples/local_rag_retrieval_qa_class.py) </td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -147,7 +147,7 @@ with Compressing _(save RAM while store and retrieving)_</td>
 <td align="left">default</td>
 <td align="left">
 
-[local_rag_chain_simple.py](local_rag_chain_simple.py)
+[local_rag_chain_simple.py](run_examples/local_rag_chain_simple.py)
 
 [combine_simple_RAG_chains.py](chains/combine_simple_RAG_chains.py) </td>
 <td align="left">
@@ -156,7 +156,7 @@ with Compressing _(save RAM while store and retrieving)_</td>
 <td align="left">with Multiple Queries Generation</td>
 <td align="left">
 
-[local_rag_chain_multi_query.py](local_rag_chain_multi_query.py)
+[local_rag_chain_multi_query.py](run_examples/local_rag_chain_multi_query.py)
 
 [multiple_queries_chain.py](chains/multiple_queries_chain.py)</td>
 <td align="left"></td>
