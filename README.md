@@ -17,17 +17,15 @@ RAG = Retrieval Augmented Generation
 - __Retrieval Augmented__ - supplementing the user's query with found relevant information.
 - __Retrieval Augmented Generation__ - generating a response to the user while taking into account additionally found relevant information.
 
-**Quick work demonstration:**
+**Walkthrough example:**
 
-User query: _"Baby, don't hurt me..."_
-
-RAG process:
+1) User query: _"Baby, don't hurt me..."_
+2) RAG process:
    - Input Interpretation: The system receives the user's plea and detects a potential for a song lyric reference.
    - Data Retrieval: It quickly scours the attached database for relevant information, focusing on the lyrics of the song "What is Love" by Haddaway.
    - Augmentation: Next, it augments the user's query with additional context, ensuring a deep understanding of the reference.
    - Generation: Armed with the knowledge of the song's lyrics, the system crafts a witty response, perhaps something like: _"No worries, user! I'll only hurt you with my endless knowledge of 90s pop hits."_
-
-RAG delivery: Finally, the system delivers the response with a touch of humor, leaving the user amused and impressed by the AI's cleverness.
+3) RAG delivery: Finally, the system delivers the response with a touch of humor, leaving the user amused and impressed by the AI's cleverness.
 
 
 ### Why RAG?
@@ -44,7 +42,7 @@ RAG delivery: Finally, the system delivers the response with a touch of humor, l
 - with __HuggingFace__ models _(if you want to try some the very resent releases and cutting-edge technology)_
 - __localy__ _(if you love the smell of code in the morning)_
 
-You can start with [`start_here.py`](tutorials/start_here.py) file and prooceed with other exceptionally detailed for the begginers files and notebooks from [tutorials](tutorials) section.
+You can start with [`start_here.py`](tutorials/start_here.py) file and proceed with other exceptionally detailed for the begginers files and notebooks from [tutorials](tutorials) section.
 
 ### Where to find the model and how to choose one:
 
@@ -52,11 +50,11 @@ How to choose retrieval model (llm embedder)? --> [mteb/leaderboard](https://hug
 tab:
 Retrieval or Retrieval w/Instruction
 
-How to choose reranking model (reorder list of releveant documents)?
+How to choose reranking model (reorder list of relevant documents)?
 --> [mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard), tab:
 Reranking
 
-How to choose generator model (llm for generate finel answer)?
+How to choose generator model (llm for generate final answer)?
 --> [open-llm-leaderboard/open_llm_leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
 
 <a id="item-one"></a>
