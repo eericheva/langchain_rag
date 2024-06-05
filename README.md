@@ -4,13 +4,45 @@ Repo contains scripts with overly detailed explanations as well as advanced scri
 details and comments (ready to run ones). These resources aim to provide someone with concise guidance and practical
 examples for creating and evaluating a RAG system from scratch.
 
+Beginners start : [`start_here.py`](tutorials/start_here.py)
+
+Further methods : [Advanced option to rule RAG](#item-one)
+
+### What is RAG?
+
+~~_"Baby, don't hurt me..."_~~
+
+RAG = Retrieval Augmented Generation
+- __Retrieval__ - the process of searching for and extracting relevant information (retriever).
+- __Retrieval Augmented__ - supplementing the user's query with found relevant information.
+- __Retrieval Augmented Generation__ - generating a response to the user while taking into account additionally found relevant information.
+
+1) User query: _"Baby, don't hurt me..."_
+
+2) RAG process:
+   - Input Interpretation: The system receives the user's plea and detects a potential for a song lyric reference.
+   - Data Retrieval: It quickly scours the attached database for relevant information, focusing on the lyrics of the song "What is Love" by Haddaway.
+   - Augmentation: Next, it augments the user's query with additional context, ensuring a deep understanding of the reference.
+   - Generation: Armed with the knowledge of the song's lyrics, the system crafts a witty response, perhaps something like: _"No worries, user! I'll only hurt you with my endless knowledge of 90s pop hits."_
+
+3) RAG delivery: Finally, the system delivers the response with a touch of humor, leaving the user amused and impressed by the AI's cleverness.
+
+
+### Why RAG?
+
+- **Economically Efficient Deployment**: The development of chatbots typically starts with basic models, which are LLM models trained on generalized data. RAG offers a more cost-effective method for incorporating new data into LLM, without finetuning whole LLM.
+
+- **Up-to-Date Information**: RAG enables to integrate rapidly changing and the latest data directly into generative models. By connecting LLM to real-time social media feeds or news websites, users receive the most current information.
+
+- **Increased User Trust**: With RAG, LLM can provide accurate information while citing sources, boosting user confidence in the generative AI. Users can verify information by accessing the source documents themselves, enhancing trust in the system.
+
 ### How to read and create RAG:
 
 - with __RunnableSequences__ (langchain) _(if you want clean and structured approach and easy-to-follow code sequences)_
 - with __HuggingFace__ models _(if you want to try some the very resent releases and cutting-edge technology)_
 - __localy__ _(if you love the smell of code in the morning)_
 
-Pls, investigate [`start_here.py`](start_here.py). The file is exceptionally detailed for the begginers.
+You can start with [`start_here.py`](tutorials/start_here.py) file and prooceed with other exceptionally detailed for the begginers files and notebooks from [tutorials](tutorials) section.
 
 ### Where to find the model and how to choose one:
 
@@ -25,7 +57,8 @@ Reranking
 How to choose generator model (llm for generate finel answer)?
 --> [open-llm-leaderboard/open_llm_leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
 
-### Advanced option to rule RAG:
+<a id="item-one"></a>
+### Advanced option to rule RAG
 
 Pls, refer to the other options and files listed below, to get less commented, but more advanced scripts, examples and
 techniques.
@@ -40,21 +73,6 @@ techniques.
         </tr>
     </thead>
     <tbody>
-        <!-- <tr>
-            <td rowspan=4 align="left">R1 Text</td>
-            <td rowspan=2 align="left">R2 Text A</td>
-            <td align="left">R3 Text A</td>
-        </tr>
-        <tr>
-            <td align="left">R3 Text B</td>
-        </tr>
-        <tr>
-            <td rowspan=2 align="left">R2 Text B</td>
-            <td align="left">R3 Text C</td>
-        </tr>
-        <tr>
-            <td align="left">R3 Text D</td>
-        </tr> -->
 <tr>
             <td rowspan=2 align="left">How to run HuggingFace models</td>
             <td align="left">localy:
@@ -75,7 +93,9 @@ techniques.
 
 - with HuggingFaceHub</td>
 
-<td align="left"></td>
+<td align="left">
+
+_in progress... release imminent_</td>
 <td align="left">
 
 [Hugging Face Hub documentation](https://huggingface.co/docs/hub/en/index) </td>
@@ -83,7 +103,9 @@ techniques.
         <tr>
         <td align="left">How to evaluate and monitoring application</td>
         <td align="left">with LangSmith</td>
-        <td align="left"></td>
+        <td align="left">
+
+_in progress... release imminent_</td>
         <td align="left">
 
 [Get started with LangSmith](https://docs.smith.langchain.com/) </td>
@@ -136,7 +158,9 @@ with Caching _(save your time while next creating)_</td>
 <td align="left">
 
 with Compressing _(save RAM while store and retrieving)_</td>
-<td align="left"></td>
+<td align="left">
+
+_in progress... release imminent_</td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -170,12 +194,16 @@ with `chain_type` :
 - `map_reduce`,
 - `refine`,
 - `map_rerank`</td>
-  <td align="left"></td>
+  <td align="left">
+
+  _in progress... release imminent_</td>
   <td align="left"></td>
   </tr>
   <tr>
   <td align="left">with Prompting</td>
-  <td align="left"></td>
+  <td align="left">
+
+  _in progress... release imminent_</td>
   <td align="left"></td>
   </tr>
   <tr>
@@ -189,7 +217,9 @@ with `chain_type` :
 </tr>
   <tr>
         <td align="left">with Prompting</td>
-        <td align="left"></td>
+        <td align="left">
+
+_in progress... release imminent_</td>
         <td align="left"></td>
 </tr>
 
