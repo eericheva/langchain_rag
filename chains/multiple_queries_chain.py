@@ -4,7 +4,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableLambda
 
-from tools import prompt_templates
+from tools import prompt_templates_retrieve
 from tools.invoke_result import invoke_generate_queries_with_origin
 
 
@@ -12,7 +12,7 @@ def multiple_queries_chain(llm_gen):
     # Generate multiple alternatives to the question formulation
     # Prompt for multiple alternatives to the question formulation
     prompt_multi_query = PromptTemplate(
-        template=prompt_templates.prompt_multi_query,
+        template=prompt_templates_retrieve.prompt_multi_query,
         input_variables=["question", "number_questions"],
     )
     # Chain for generating multiple alternatives to the question formulation

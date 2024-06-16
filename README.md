@@ -58,7 +58,7 @@ How to choose generator model (llm for generate final answer)?
 --> [open-llm-leaderboard/open_llm_leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
 
 <a id="item-one"></a>
-### Advanced option to rule RAG
+## Advanced option to rule RAG
 
 Pls, refer to the other options and files listed below, to get less commented, but more advanced scripts, examples and
 techniques.
@@ -73,6 +73,20 @@ techniques.
         </tr>
     </thead>
     <tbody>
+<tr>
+<td colspan=4 align="center">Basic tutorials</td>
+</tr>
+<tr>
+            <td align="left">Basic and simple</td>
+            <td align="left">default</td>
+            <td align="left">
+
+[start_here.py](tutorials/start_here.py)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td colspan=4 align="center">Run scripts for full RAG system</td>
+</tr>
 <tr>
             <td rowspan=2 align="left">How to run HuggingFace models</td>
             <td align="left">localy:
@@ -110,6 +124,22 @@ _in progress... release imminent_</td>
 
 [Get started with LangSmith](https://docs.smith.langchain.com/) </td>
 </tr>
+</tbody>
+</table>
+
+## Individual components and elements
+
+<table>
+    <thead>
+        <tr>
+            <th>HOWTO</th>
+            <th>Option</th>
+            <th>Go-to file</th>
+            <th>Outer documentation</th>
+        </tr>
+    </thead>
+    <tbody>
+
 <tr>
 <td colspan=4 align="center">How to store and embed documents?</td>
 </tr>
@@ -200,14 +230,16 @@ with `chain_type` :
   <td align="left"></td>
   </tr>
   <tr>
-  <td align="left">with Prompting</td>
+  <td align="left">with Prompting
+
+  Hint: ask GPT to provide instruction for your RAG system and use it as prompt template</td>
   <td align="left">
 
-  _in progress... release imminent_</td>
+  [prompt_templates_retrieve.py](tools/prompt_templates_retrieve.py)</td>
   <td align="left"></td>
   </tr>
   <tr>
-        <td rowspan=2 align="left">How to generate answer</td>
+        <td rowspan=5 align="left">How to generate answer</td>
         <td align="left">default</td>
         <td align="left">
 
@@ -216,11 +248,56 @@ with `chain_type` :
 
 </tr>
   <tr>
-        <td align="left">with Prompting</td>
+        <td align="left">with Prompting
+
+Hint: ask GPT to provide instruction for your RAG system and use it as prompt template
+</td>
         <td align="left">
 
-_in progress... release imminent_</td>
+[prompt_templates_generate.py](tools/prompt_templates_generate.py)</td>
         <td align="left"></td>
+</tr>
+<tr>
+        <td align="left">
+
+with GPTQQuantizer _(save RAM and fast generation)_</td>
+        <td align="left">
+
+`pip install optimum auto-gptq`
+
+  [create_llm_gen_default.py](generators/create_llm_gen_default.py) </td>
+        <td align="left"></td>
+</tr>
+<tr>
+        <td align="left">
+
+with vLLM _(If you encounter `RuntimeError: probability tensor contains either inf, nan or element < 0` during `GPTQQuantizer` inference)_
+</td>
+        <td align="left">
+
+`pip install vllm`
+
+[create_llm_gen_vLLM.py](generators/create_llm_gen_vLLM.py)</td>
+        <td align="left">
+
+[vLLM in LangChain](https://python.langchain.com/v0.2/docs/integrations/llms/vllm/)
+</td>
+</tr>
+
+<tr>
+        <td align="left">
+
+with LlamaCpp _(save RAM and fast generation)_
+</td>
+        <td align="left">
+
+`pip install llama-cpp-python`
+
+[create_llm_gen_llama_cpp.py](generators/create_llm_gen_llama_cpp.py)</td>
+        <td align="left">
+
+[LlamaCpp in LangChain](https://python.langchain.com/v0.2/docs/integrations/llms/llamacpp/#gpu)
+</td>
 </tr>
 
 </tbody>

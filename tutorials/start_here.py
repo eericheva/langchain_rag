@@ -14,7 +14,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from tqdm import tqdm
 
 from setup import Config, logger, print_config
-from tools import prompt_templates
+from tools import prompt_templates_generate, prompt_templates_retrieve
 from tools.invoke_result import (
     invoke_generate_queries_with_origin,
     invoke_input_context_answer,
@@ -146,7 +146,7 @@ def overview():
     logger.info("Classical RETRIEVER and GENERATOR")
     # Prompt
     prompt = PromptTemplate(
-        template=prompt_templates.prompt_template_input_context,
+        template=prompt_templates_generate.prompt_template_input_context,
         input_variables=["context", "input"],
     )
     question_answer_chain = create_stuff_documents_chain(llm_gen, prompt)
@@ -171,7 +171,7 @@ def overview():
     # Generate multiple alternatives to the question formulation
     # Prompt for multiple alternatives to the question formulation
     prompt_multi_query = PromptTemplate(
-        template=prompt_templates.prompt_multi_query,
+        template=prompt_templates_retrieve.prompt_multi_query,
         # you can create any imagined prompt as template.
         # Note: if your prompt refers to some variables in formatting type, you should provide these variables
         # names to input_variables parameter
@@ -248,7 +248,7 @@ def overview():
 
     # Prompt for generation answer with retriever and generation prompt
     prompt_generation = PromptTemplate(
-        template=prompt_templates.prompt_template_question_context,
+        template=prompt_templates_generate.prompt_template_question_context,
         input_variables=["question", "context"],
     )
     # RAG Chain
