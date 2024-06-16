@@ -6,7 +6,7 @@ from langchain_core.prompts import PromptTemplate
 from embedders.create_llm_emb_default import create_llm_emb_default
 from generators.create_llm_gen_default import create_llm_gen_default
 from setup import Config, logger, print_config
-from tools import prompt_templates
+from tools import prompt_templates_generate
 from tools.invoke_result import (
     invoke_input_context_answer,
     invoke_query_source_documents_result,
@@ -45,7 +45,7 @@ def local_rag_retrieval_qa():
     logger.info("Classical RETRIEVER and GENERATOR")
     # Prompt
     prompt = PromptTemplate(
-        template=prompt_templates.prompt_template_input_context,
+        template=prompt_templates_generate.prompt_template_input_context,
         input_variables=["context", "input"],
     )
     question_answer_chain = create_stuff_documents_chain(llm_gen, prompt)

@@ -4,7 +4,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 
 from setup import Config, logger
-from tools import prompt_templates
+from tools import prompt_templates_generate
 
 
 def simple_retriever_generator_chain1(retriever, llm_gen):
@@ -25,7 +25,7 @@ def simple_retriever_generator_chain1(retriever, llm_gen):
     ############## GENERATOR CHAIN ##############
     # Prompt for generation answer with retriever and generation prompt
     prompt_generation = PromptTemplate(
-        template=prompt_templates.prompt_template_question_context,
+        template=prompt_templates_generate.prompt_template_question_context,
         input_variables=["question", "context"],
     )
     # RAG Chain
@@ -56,7 +56,7 @@ def simple_retriever_generator_chain2(retriever, llm_gen):
     ############## GENERATOR CHAIN ##############
     # Prompt for generation answer with retriever and generation prompt
     prompt_generation = PromptTemplate(
-        template=prompt_templates.prompt_template_question_context,
+        template=prompt_templates_generate.prompt_template_question_context,
         input_variables=["question", "context"],
     )
     # RAG Chain
