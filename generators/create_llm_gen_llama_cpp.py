@@ -18,7 +18,7 @@ def create_llm_gen_llama_cpp():
         # The number of layers to put on the GPU. The rest will be on the CPU. If you don't know how many layers
         # there are, you can use -1 to move all
         # n_batch=512,
-        n_ctx=-1,  # -1 stands for using original model context lenght
+        # n_ctx=-1,  # -1 should stand for using original model context lenght  !!! You can not provide this here, Just leave it default, it take origin model context len
         verbose=True,  # Verbose is required to pass to the callback manager
     )
     return llm_gen
