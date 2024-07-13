@@ -300,6 +300,46 @@ with LlamaCpp _(save RAM and fast generation)_
 </td>
 </tr>
 
+<tr>
+<td colspan=4 align="center">How to further improve your chain?</td>
+</tr>
+<tr>
+        <td rowspan=2 align="left">Advansed chain elements</td>
+        <td align="left">Amplification</td>
+        <td align="left">
+
+_in progress... release imminent_ </td>
+        <td align="left">
+
+[Christiano et al. 2018. Supervising strong learners by amplifying weak experts](https://arxiv.org/pdf/1810.08575)
+</td>
+
+</tr>
+<tr>
+        <td align="left">Debate</td>
+        <td align="left">
+
+_in progress... release imminent_ </td>
+        <td align="left">
+
+[Irving et al. 2018. AI safety via debate](https://arxiv.org/pdf/1805.00899)
+</td>
+</tr>
+
+<tr>
+        <td rowspan=1 align="left">Advansed prompt techniques</td>
+        <td align="left">default</td>
+        <td align="left">
+
+_in progress... release imminent_ </td>
+  <td align="left">
+
+[Schulhoff et al. 2024. The Prompt Report: A Systematic Survey of Prompting Techniques](https://arxiv.org/abs/2406.06608)
+</td>
+
+</tr>
+
+
 </tbody>
 
 </table>
