@@ -4,7 +4,7 @@ Repo contains scripts with overly detailed explanations as well as advanced scri
 details and comments (ready to run ones). These resources aim to provide someone with concise guidance and practical
 examples for creating and evaluating a RAG system from scratch.
 
-Beginners start : [`start_here.py`](tutorials/start_here.py)
+Beginners start : [`start_here.ipynb`](tutorials/start_here.ipynb) or [`start_here.py`](tutorials/start_here.py)
 
 Further methods : [Advanced option to rule RAG](#item-one)
 
@@ -42,7 +42,7 @@ RAG = Retrieval Augmented Generation
 - with __HuggingFace__ models _(if you want to try some the very resent releases and cutting-edge technology)_
 - __localy__ _(if you love the smell of code in the morning)_
 
-You can start with [`start_here.py`](tutorials/start_here.py) file and proceed with other exceptionally detailed for the begginers files and notebooks from [tutorials](tutorials) section.
+You can start with [`start_here.ipynb`](tutorials/start_here.ipynb) or [`start_here.py`](tutorials/start_here.py) file and proceed with other exceptionally detailed for the begginers files and notebooks from [tutorials](tutorials) section.
 
 ### Where to find the model and how to choose one:
 
@@ -81,7 +81,10 @@ techniques.
             <td align="left">default</td>
             <td align="left">
 
-[start_here.py](tutorials/start_here.py)</td>
+[`start_here.ipynb`](tutorials/start_here.ipynb)
+
+[`start_here.py`](tutorials/start_here.py)
+</td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -97,9 +100,9 @@ techniques.
 </td>
             <td align="left">
 
-[local_rag_chain_simple.py](run_examples/local_rag_chain_simple.py)
+[`local_rag_chain_simple.py`](run_examples/local_rag_chain_simple.py)
 
-[local_rag_retrieval_qa_class.py](run_examples/local_rag_retrieval_qa_class.py) </td>
+[`local_rag_retrieval_qa_class.py`](run_examples/local_rag_retrieval_qa_class.py) </td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -154,9 +157,9 @@ default with:
 - dump and load from disk </td>
   <td align="left">
 
-[get_vectorstore.py](vectorstores/get_vectorstore.py)
+[`get_vectorstore.py`](vectorstores/get_vectorstore.py)
 
-[create_vectorstore.py](vectorstores/create_vectorstore.py)</td>
+[`create_vectorstore.py`](vectorstores/create_vectorstore.py)</td>
 <td align="left">
 
 [FAISS](https://python.langchain.com/v0.1/docs/integrations/vectorstores/faiss/)
@@ -168,7 +171,7 @@ default with:
 <td align="left">default</td>
 <td align="left">
 
-[create_llm_emb_default.py](embedders/create_llm_emb_default.py) </td>
+[`create_llm_emb_default.py`](embedders/create_llm_emb_default.py) </td>
 <td align="left">
 
 [Text embedding models](https://python.langchain.com/v0.1/docs/modules/data_connection/text_embedding/) </td>
@@ -179,7 +182,7 @@ default with:
 with Caching _(save your time while next creating)_</td>
 <td align="left">
 
-[create_llm_emb_cached.py](embedders/create_llm_emb_cached.py) </td>
+[`create_llm_emb_cached.py`](embedders/create_llm_emb_cached.py) </td>
 <td align="left">
 
 [Caching Embeddings](https://python.langchain.com/v0.1/docs/modules/data_connection/text_embedding/caching_embeddings/) </td>
@@ -201,18 +204,18 @@ _in progress... release imminent_</td>
 <td align="left">default</td>
 <td align="left">
 
-[local_rag_chain_simple.py](run_examples/local_rag_chain_simple.py)
+[`local_rag_chain_simple.py`](run_examples/local_rag_chain_simple.py)
 
-[combine_simple_RAG_chains.py](chains/combine_simple_RAG_chains.py) </td>
+[`combine_simple_RAG_chains.py`](chains/combine_simple_RAG_chains.py) </td>
 <td align="left">
 </tr>
 <tr>
 <td align="left">with Multiple Queries Generation</td>
 <td align="left">
 
-[local_rag_chain_multi_query.py](run_examples/local_rag_chain_multi_query.py)
+[`local_rag_chain_multi_query.py`](run_examples/local_rag_chain_multi_query.py)
 
-[multiple_queries_chain.py](chains/multiple_queries_chain.py)</td>
+[`multiple_queries_chain.py`](chains/multiple_queries_chain.py)</td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -235,7 +238,7 @@ with `chain_type` :
   Hint: ask GPT to provide instruction for your RAG system and use it as prompt template</td>
   <td align="left">
 
-  [prompt_templates_retrieve.py](tools/prompt_templates_retrieve.py)</td>
+  [`prompt_templates_retrieve.py`](tools/prompt_templates_retrieve.py)</td>
   <td align="left"></td>
   </tr>
   <tr>
@@ -243,7 +246,7 @@ with `chain_type` :
         <td align="left">default</td>
         <td align="left">
 
-  [create_llm_gen_default.py](generators/create_llm_gen_default.py) </td>
+  [`create_llm_gen_default.py`](generators/create_llm_gen_default.py) </td>
   <td align="left"></td>
 
 </tr>
@@ -254,7 +257,7 @@ Hint: ask GPT to provide instruction for your RAG system and use it as prompt te
 </td>
         <td align="left">
 
-[prompt_templates_generate.py](tools/prompt_templates_generate.py)</td>
+[`prompt_templates_generate.py`](tools/prompt_templates_generate.py)</td>
         <td align="left"></td>
 </tr>
 <tr>
@@ -265,7 +268,7 @@ with GPTQQuantizer _(save RAM and fast generation)_</td>
 
 `pip install optimum auto-gptq`
 
-  [create_llm_gen_default.py](generators/create_llm_gen_default.py) </td>
+  [`create_llm_gen_default.py`](generators/create_llm_gen_default.py) </td>
         <td align="left"></td>
 </tr>
 <tr>
@@ -277,7 +280,7 @@ with vLLM _(If you encounter `RuntimeError: probability tensor contains either i
 
 `pip install vllm`
 
-[create_llm_gen_vLLM.py](generators/create_llm_gen_vLLM.py)</td>
+[`create_llm_gen_vLLM.py`](generators/create_llm_gen_vLLM.py)</td>
         <td align="left">
 
 [vLLM in LangChain](https://python.langchain.com/v0.2/docs/integrations/llms/vllm/)
@@ -293,7 +296,7 @@ with LlamaCpp _(save RAM and fast generation)_
 
 `pip install llama-cpp-python`
 
-[create_llm_gen_llama_cpp.py](generators/create_llm_gen_llama_cpp.py)</td>
+[`create_llm_gen_llama_cpp.py`](generators/create_llm_gen_llama_cpp.py)</td>
         <td align="left">
 
 [LlamaCpp in LangChain](https://python.langchain.com/v0.2/docs/integrations/llms/llamacpp/#gpu)
