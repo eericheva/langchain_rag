@@ -346,3 +346,12 @@ _in progress... release imminent_ </td>
 </tbody>
 
 </table>
+
+
+Further reading:
+
+_Mrs Wallbreaker or: How I Learned to Stop Worrying and Love the AGI._
+
+_About AI Risk, AI Alignment, AI Safety, AI Ethics_
+
+https://t.me/MrsWallbreaker
